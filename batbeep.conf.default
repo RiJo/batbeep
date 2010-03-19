@@ -1,0 +1,9 @@
+acpi_location:      /proc/acpi/battery/BAT0
+poll_timeout:       10000 ms
+warning_level:      20 %
+warning_frequency:  250 hz
+warning_duration:   500 ms
+warning_timeout:    30000 ms
+bat_state:          charging state
+bat_capacity:       last full capacity
+bat_remaining:      remaining capacity
