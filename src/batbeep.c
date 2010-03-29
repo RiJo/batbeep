@@ -1,4 +1,26 @@
 /*
+    Copyright (C) 2010 Rikard Johansson
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License along
+    with this program; if not, write to the Free Software Foundation, Inc.,
+    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+    This program includes a partly rewritten version of Johnathan Nightingale's
+    program beep-1.2.2, http://johnath.com/
+*/
+
+
+/*
     Todo
         * Several different warnings in .settings(?)
         * Improve properties
@@ -20,13 +42,13 @@
 #include "hashmap.h"
 #include "beep.h"
 
-#define PROGRAM_NAME "batbeep"
-#define PROGRAM_VERSION "1.1.0"
-#define PID_FILE "/var/run/" PROGRAM_NAME ".pid"
-#define SETTINGS_FILE "/etc/" PROGRAM_NAME ".conf"
+#define PROGRAM_NAME        "batbeep"
+#define PROGRAM_VERSION     "1.1.1"
+#define PID_FILE            "/var/run/" PROGRAM_NAME ".pid"
+#define SETTINGS_FILE       "/etc/" PROGRAM_NAME ".conf"
 
-#define BUFFER_SIZE 255
-#define SLEEP(ms) usleep(ms*1000)
+#define BUFFER_SIZE         255
+#define SLEEP(ms)           usleep(ms*1000)
 
 hashmap *settings = NULL;
 hashmap *batt_info = NULL;
