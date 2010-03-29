@@ -43,7 +43,7 @@
 #include "beep.h"
 
 #define PROGRAM_NAME        "batbeep"
-#define PROGRAM_VERSION     "1.1.1"
+#define PROGRAM_VERSION     "1.1.2"
 #define PID_FILE            "/var/run/" PROGRAM_NAME ".pid"
 #define SETTINGS_FILE       "/etc/" PROGRAM_NAME ".conf"
 

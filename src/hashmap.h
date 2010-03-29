@@ -3,7 +3,7 @@
 #ifndef HASHMAP_H
 #define HASHMAP_H
 
-#define HM_VERSION "1.0-b6"
+#define HM_VERSION "1.0.0-b6"
 
 struct node {
     char *key;

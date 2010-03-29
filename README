@@ -1,10 +1,8 @@
 --------------------------------------------------------------------------------
 
     batbeep
-    current version:        1.1.1
+    current version:        1.1.2
     by:                     Rikard Johansson
-
-    dependencies:           libhashmap:     http://github.com/RiJo/hashmap
 
     This is a daemon which beeps at given frequencies when the battery power
     is low.
@@ -70,4 +68,11 @@
     * Fixed Makefile
     * Included beep.c instead of making an archive of it
     * Added LICENSE
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+ version 1.1.2, 2010-03-29
+--------------------------------------------------------------------------------
+    * Included hashmap.c instead of making an archive of it
 --------------------------------------------------------------------------------
