@@ -23,12 +23,16 @@
 /*
     Todo
         * Several different warnings in .settings(?)
-        * Improve properties
-        * run in valgrind to find memory leaks
-        * create archive of daemon.c
 */
 
 #define _XOPEN_SOURCE 500 /* Or: #define _BSD_SOURCE (for usleep) */
+
+#include "batbeep.h"
+
+#include "daemon.h"
+#include "property.h"
+#include "hashmap.h"
+#include "beep.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -36,19 +40,6 @@
 #include <signal.h>
 #include <unistd.h> /* usleep() */
 #include <getopt.h> /* getopt_long() */
-
-#include "daemon.h"
-#include "property.h"
-#include "hashmap.h"
-#include "beep.h"
-
-#define PROGRAM_NAME        "batbeep"
-#define PROGRAM_VERSION     "1.1.2"
-#define PID_FILE            "/var/run/" PROGRAM_NAME ".pid"
-#define SETTINGS_FILE       "/etc/" PROGRAM_NAME ".conf"
-
-#define BUFFER_SIZE         255
-#define SLEEP(ms)           usleep(ms*1000)
 
 hashmap *settings = NULL;
 hashmap *batt_info = NULL;
@@ -90,13 +81,10 @@ void to_string(FILE *output, char *key, void *value) {
 }
 
 unsigned int gcd(unsigned int high, unsigned int low) {
-    int temp;
     if (high < low) {
-        temp = high;
-        high = low;
-        low = temp;
+        gcd(low, high);
     }
-    int rest = high % low;
+    unsigned int rest = high % low;
     if (rest == 0) {
         return low;
     }
@@ -129,9 +117,9 @@ void print_help() {
 }
 
 void print_version() {
-    printf("%s, version %s\n", PROGRAM_NAME, PROGRAM_VERSION);
+    printf("%s, version %s, released %s\n", PROGRAM_NAME, PROGRAM_VERSION, PROGRAM_DATE);
     printf("   compiled %s, %s\n\n", __DATE__, __TIME__);
-    printf("Rikard Johansson, 2010\n");
+    printf("%s\n", PROGRAM_AUTHORS);
 }
 
 void print_usage() {

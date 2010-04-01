@@ -1,27 +1,33 @@
-CC=gcc
-CCOPTS=-Wall -std=c99
-CCFLAGS=-std=c99
-DEBUG=-g -D=DEBUG
-DEST=batbeep
+CC       =  gcc
+CCFLAGS  =  -O2 -march=core2 -Wall -std=c99
+DEBUG    =  -g -D=_DEBUG_
+INCLUDES =  -I/usr/include
+LDPATH   =  -L/usr/lib64
+LIBS     =  
+NAME     =  batbeep
 
-HEADERS =   src/daemon.h    \
+HEADERS =   src/batbeep.h   \
+            src/daemon.h    \
             src/beep.h      \
             src/hashmap.h   \
-            src/property.h
+            src/property.h  \
 
-SOURCE =    src/batbeep.c   \
-            src/daemon.c    \
-            src/beep.c      \
-            src/hashmap.c   \
-            src/property.c
+OBJS     =  batbeep.o       \
+            daemon.o        \
+            beep.o          \
+            hashmap.o       \
+            property.o      \
 
-all: $(DEST)
+all: $(NAME)
 
 debug: CCFLAGS += $(DEBUG)
-debug: $(DEST)
+debug: $(NAME)
 
-$(DEST): $(SOURCE) $(HEADERS) Makefile
-	$(CC) $(CCOPTS) $(SOURCE) -o $(DEST) $(CCFLAGS)
+$(NAME): $(OBJS) Makefile
+	$(CC) $(OBJS) $(LDPATH) $(LIBS) -o $@
+
+$(OBJS): %.o: ./src/%.c $(HEADERS)
+	$(CC) $(CFLAGS) $(CCFLAGS) $(DEFINES) $(INCLUDES) -c $< -o $@
 
 clean:
-	rm $(DEST)
+	rm -f $(NAME) $(OBJS)

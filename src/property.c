@@ -38,9 +38,9 @@ void load_properties(hashmap *map, FILE *file) {
                 // break;
             case NL:
                 value[i] = '\0';
-                char *data = malloc(sizeof(value) + 1);
-                strcpy(data, value);
                 if (strlen(key) > 0) {
+                    char *data = malloc(strlen(value) + 1);
+                    strcpy(data, value);
                     hm_set(map, key, data);
                 }
                 memset(key, '\0', BUFFER_SIZE);

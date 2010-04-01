@@ -1,7 +1,7 @@
 --------------------------------------------------------------------------------
 
     batbeep
-    current version:        1.1.2
+    current version:        1.1.3
     by:                     Rikard Johansson
 
     This is a daemon which beeps at given frequencies when the battery power
@@ -75,4 +75,14 @@
  version 1.1.2, 2010-03-29
 --------------------------------------------------------------------------------
     * Included hashmap.c instead of making an archive of it
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+ version 1.1.3, 2010-04-01
+--------------------------------------------------------------------------------
+    * Bugfix: fixed memory leak when loading properties
+    * Bugfix: allocated too much memory for value in hashmaps
+    * Added header file batbeep.h
+    * Updated Makefile
 --------------------------------------------------------------------------------
