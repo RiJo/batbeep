@@ -1,5 +1,5 @@
 CC=gcc
-CCOPTS=-Wall -g
+CCOPTS=-Wall -std=c99
 CCFLAGS=-std=c99
 DEBUG=-g -D=DEBUG
 DEST=batbeep
