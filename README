@@ -93,7 +93,7 @@
 --------------------------------------------------------------------------------
     * Stripped some unused code in beep module
     * Added repetitions to beep
-    * Available settings
+    * New settings
         * beep repetitions
         * beep pause (sleep between repetitions)
 --------------------------------------------------------------------------------
