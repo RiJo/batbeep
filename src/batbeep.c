@@ -46,9 +46,12 @@ hashmap *batt_info = NULL;
 
 unsigned int poll_timeout;
 unsigned int warning_level;
-unsigned int warning_frequency;
-unsigned int warning_duration;
 unsigned int warning_timeout;
+unsigned int beep_frequency;
+unsigned int beep_duration;
+unsigned int beep_repetitions;
+unsigned int beep_pause;
+
 unsigned int sleep_timeout;
 char *bat_state;
 char *bat_capacity;
@@ -133,18 +136,22 @@ void read_settings() {
     assure_key(settings, "acpi_location");
     assure_key(settings, "poll_timeout");
     assure_key(settings, "warning_level");
-    assure_key(settings, "warning_frequency");
-    assure_key(settings, "warning_duration");
     assure_key(settings, "warning_timeout");
+    assure_key(settings, "beep_frequency");
+    assure_key(settings, "beep_duration");
+    assure_key(settings, "beep_repetitions");
+    assure_key(settings, "beep_pause");
     assure_key(settings, "bat_state");
     assure_key(settings, "bat_capacity");
     assure_key(settings, "bat_remaining");
 
     poll_timeout = atoi(hm_get(settings, "poll_timeout"));
     warning_level = atoi(hm_get(settings, "warning_level"));
-    warning_frequency = atoi(hm_get(settings, "warning_frequency"));
-    warning_duration = atoi(hm_get(settings, "warning_duration"));
     warning_timeout = atoi(hm_get(settings, "warning_timeout"));
+    beep_frequency = atoi(hm_get(settings, "beep_frequency"));
+    beep_duration = atoi(hm_get(settings, "beep_duration"));
+    beep_repetitions = atoi(hm_get(settings, "beep_repetitions"));
+    beep_pause = atoi(hm_get(settings, "beep_pause"));
     sleep_timeout = gcd(poll_timeout, warning_timeout);
 }
 
@@ -195,7 +202,7 @@ int main(int argc, char **argv) {
     while((arg = getopt_long(argc, argv, "bhvd", opt_list, NULL)) != EOF) {
         switch (arg) {
             case 'b':
-                beep(warning_frequency, warning_duration);
+                beep(beep_frequency, beep_duration, beep_repetitions, beep_pause);
                 exit(EXIT_SUCCESS);
             case 'h':
                 print_help();
@@ -230,7 +237,7 @@ int main(int argc, char **argv) {
         }
         if ((sleep_timeout * (warning_count + 1)) % warning_timeout == 0) {
             if (capacity_factor <= (float)warning_level / 100.0 && strcmp(bat_state, "discharging") == 0) {
-                beep(warning_frequency, warning_duration);
+                beep(beep_frequency, beep_duration, beep_repetitions, beep_pause);
             }
             if (debugging) {
                 printf("> Capacity: %.2f%%\tState: %s\n", capacity_factor * 100, bat_state);
