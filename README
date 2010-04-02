@@ -92,5 +92,8 @@
  version 1.2.0, 2010-04-02
 --------------------------------------------------------------------------------
     * Stripped some unused code in beep module
-    * Added repetitions to beep (new batbeep.conf)
+    * Added repetitions to beep
+    * Available settings
+        * beep repetitions
+        * beep pause (sleep between repetitions)
 --------------------------------------------------------------------------------
