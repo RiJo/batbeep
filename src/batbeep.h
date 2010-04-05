@@ -2,8 +2,8 @@
 #define _BATBEEP_H_ 1
 
 #define PROGRAM_NAME        "batbeep"
-#define PROGRAM_VERSION     "1.2.0"
-#define PROGRAM_DATE        "2010-04-02"
+#define PROGRAM_VERSION     "1.3.0"
+#define PROGRAM_DATE        "2010-04-05"
 #define PROGRAM_AUTHORS     "Rikard Johansson, 2010"
 
 #define PID_FILE            "/var/run/" PROGRAM_NAME ".pid"

@@ -19,12 +19,6 @@
     program beep-1.2.2, http://johnath.com/
 */
 
-
-/*
-    Todo
-        * Several different warnings in .settings(?)
-*/
-
 #define _XOPEN_SOURCE 500 /* Or: #define _BSD_SOURCE (for usleep) */
 
 #include "batbeep.h"
@@ -38,8 +32,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <signal.h>
-#include <unistd.h> /* usleep() */
-#include <getopt.h> /* getopt_long() */
+#include <unistd.h>     /* usleep() */
+#include <getopt.h>     /* getopt_long() */
 
 hashmap *settings = NULL;
 hashmap *batt_info = NULL;
@@ -51,6 +45,7 @@ unsigned int beep_frequency;
 unsigned int beep_duration;
 unsigned int beep_repetitions;
 unsigned int beep_pause;
+int beep_increment;
 
 unsigned int sleep_timeout;
 char *bat_state;
@@ -85,15 +80,10 @@ void to_string(FILE *output, char *key, void *value) {
 
 unsigned int gcd(unsigned int high, unsigned int low) {
     if (high < low) {
-        gcd(low, high);
+        gcd(low, high); // swap values
     }
     unsigned int rest = high % low;
-    if (rest == 0) {
-        return low;
-    }
-    else {
-        return gcd(low, rest);
-    }
+    return (rest == 0) ? low : gcd(low, rest);
 }
 
 unsigned int max(unsigned int x, unsigned int y) {
@@ -141,6 +131,7 @@ void read_settings() {
     assure_key(settings, "beep_duration");
     assure_key(settings, "beep_repetitions");
     assure_key(settings, "beep_pause");
+    assure_key(settings, "beep_increment");
     assure_key(settings, "bat_state");
     assure_key(settings, "bat_capacity");
     assure_key(settings, "bat_remaining");
@@ -152,6 +143,7 @@ void read_settings() {
     beep_duration = atoi(hm_get(settings, "beep_duration"));
     beep_repetitions = atoi(hm_get(settings, "beep_repetitions"));
     beep_pause = atoi(hm_get(settings, "beep_pause"));
+    beep_increment = atoi(hm_get(settings, "beep_increment"));
     sleep_timeout = gcd(poll_timeout, warning_timeout);
 }
 
@@ -202,7 +194,7 @@ int main(int argc, char **argv) {
     while((arg = getopt_long(argc, argv, "bhvd", opt_list, NULL)) != EOF) {
         switch (arg) {
             case 'b':
-                beep(beep_frequency, beep_duration, beep_repetitions, beep_pause);
+                beep(beep_frequency, beep_duration, beep_repetitions, beep_pause, beep_increment);
                 exit(EXIT_SUCCESS);
             case 'h':
                 print_help();
@@ -237,7 +229,7 @@ int main(int argc, char **argv) {
         }
         if ((sleep_timeout * (warning_count + 1)) % warning_timeout == 0) {
             if (capacity_factor <= (float)warning_level / 100.0 && strcmp(bat_state, "discharging") == 0) {
-                beep(beep_frequency, beep_duration, beep_repetitions, beep_pause);
+                beep(beep_frequency, beep_duration, beep_repetitions, beep_pause, beep_increment);
             }
             if (debugging) {
                 printf("> Capacity: %.2f%%\tState: %s\n", capacity_factor * 100, bat_state);
