@@ -2,28 +2,31 @@
 
 #define _XOPEN_SOURCE 500
 
-#include <sys/stat.h> /* umask() */
-#include <unistd.h>
+#include <sys/stat.h>       /* umask() */
+#include <unistd.h>         /* chdir() chroot() */
 #include <stdio.h>
 #include <stdlib.h>
 
-void save_pid_to_file(char *pid_file, pid_t pid) {
-    FILE *file = 0;
-    file = fopen(pid_file, "w");
+int save_pid_to_file(char *pid_file, pid_t pid) {
+    if (pid_file == NULL) {
+        return -1;
+    }
+    FILE *file = fopen(pid_file, "w");
     if (file == NULL) {
-        fprintf(stderr, "Error: could open pid file for writing: %s\n", pid_file);
-        exit(EXIT_FAILURE);
+        return -2;
     }
     fprintf(file, "%u\n", pid);
     fflush(file);
     fclose(file);
+    return 0;
 }
 
 /*
  * Reference:
  * http://www.netzmafia.de/skripten/unix/linux-daemon-howto.html
  */
-int daemonize(char *pid_file) {
+int daemonize(char *pid_file, char *run_dir, int change_root) {
+    /* Fork new process */
     pid_t pid, sid;
     pid = fork();
     if (pid < 0) {
@@ -41,14 +44,20 @@ int daemonize(char *pid_file) {
         fprintf(stderr, "Error: could not create new SID\n");
         return 0;
     }
-    /* Change the current working directory */
-    if ((chdir("/")) < 0) {
-        fprintf(stderr, "Error: could not charge working directory\n");
+    /* Save pid file */
+    if (save_pid_to_file(pid_file, sid) < 0) {
+        fprintf(stderr, "Error: could open pid file for writing: %s\n", pid_file);
         return 0;
     }
-    /* Save pid file */
-    if (pid_file != NULL) {
-        save_pid_to_file(pid_file, sid);
+    /* Change the current working directory */
+    if (chdir(run_dir) < 0) {
+        fprintf(stderr, "Error: could not change working directory\n");
+        return 0;
+    }
+    /* Change root to current directory */
+    if (change_root && (chroot(run_dir) < 0)) {
+        fprintf(stderr, "Error: could not change root directory\n");
+        return 0;
     }
     /* Close out the standard file descriptors */
     close(STDIN_FILENO);

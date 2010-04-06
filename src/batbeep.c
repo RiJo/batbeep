@@ -214,7 +214,7 @@ int main(int argc, char **argv) {
     if (debugging) {
         debug_print();
     }
-    else if (!daemonize(PID_FILE)) {
+    else if (!daemonize(PID_FILE, "/", 0)) {
         exit(EXIT_FAILURE);
     }
 
